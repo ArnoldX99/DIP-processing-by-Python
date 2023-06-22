@@ -74,5 +74,8 @@ plt.imshow(bw_img)
 
 We can see the result: what a cool girl! I wish that could rise your interest in DIP and go furhter for learning it well.
 
+### Transfer picture into Grayscale and Bluescale
+A grayscale image is an image in which each pixel is represented by a single value that corresponds to its brightness or intensity level. In other words, a grayscale image contains no color information, and the only variation in the image is the difference in brightness or darkness of each pixel.
 
+Be different from RGB image which constructed by 3 channels, Grayscale images are typically represented using a single channel, where each pixel is represented by a single 8-bit value ranging from 0 to 255. A value of 0 represents black, while a value of 255 represents white. Values in between represent varying shades of gray.
 
