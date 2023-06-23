@@ -77,5 +77,49 @@ We can see the result: what a cool girl! I wish that could rise your interest in
 ### Transfer picture into Grayscale and Bluescale
 A grayscale image is an image in which each pixel is represented by a single value that corresponds to its brightness or intensity level. In other words, a grayscale image contains no color information, and the only variation in the image is the difference in brightness or darkness of each pixel.
 
-Be different from RGB image which constructed by 3 channels, Grayscale images are typically represented using a single channel, where each pixel is represented by a single 8-bit value ranging from 0 to 255. A value of 0 represents black, while a value of 255 represents white. Values in between represent varying shades of gray.
+Be different from RGB image which constructed by 3 channels, Grayscale images are typically represented using a single channel, where each pixel is represented by a single 8-bit value ranging from 0 to 255. A value of 0 represents black, while a value of 255 represents white. Values in between represent varying shades of gray.  What's more, we can transfer the image into Blue-color style, just like characters in Avatar.
+
+```python
+# Change it into gray figure   ** See the NOTE!!
+gray_mat = [0.299,0.857,0.114]
+gray_img = np.dot(img,gray_mat)
+fig = plt.figure(figsize=(11,4))
+plt.subplot(1,2,1)
+plt.imshow(gray_img, cmap='gray')
+
+
+# Change image color to Blue-style
+hsv_img = cv2.cvtColor(img, cv2.COLOR_RGB2HSV) # Transfer RGB image into HSV figure
+blue_tint = np.zeros_like(hsv_img)
+# Set the hue channel of the numpy array to a value that corresponds to blue. The hue channel in the HSV color space ranges from 0 to 179,
+# with blue corresponding to a hue value of around 120:
+blue_tint[:, :, 0] = 120
+# Set the saturation and value channels of the numpy array to the corresponding channels of the HSV image:
+blue_tint[:, :, 1] = hsv_img[:, :, 1]
+blue_tint[:, :, 2] = hsv_img[:, :, 2]
+# Transform it back to RGB image
+blue_img = cv2.cvtColor(blue_tint, cv2.COLOR_HSV2RGB)
+plt.subplot(1,2,2)
+plt.imshow(blue_img)
+```
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/20e777ec-1e25-4de4-8589-e8988b209075)
+
+The operation is quite simpe for gray-scale figure-- we only need to multiply a $1 \times 3$ matrix. In fact you can just consider it as a 'weighted average' which can leads a RGB image to gray-scale.
+
+**Note**: The formula of Gray-dgree processing：$Gray=R*0.299+G*0.587+B*0.114$ \
+Or we can directly use package: *gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)*, directly reach the goal.
+
+## 2.Gray-Level Histogram
+
+We've learnt in the previous chapter about gray-scale image. Now we want to do an important and useful visualization of it —— the gray-level histogram. A gray-level histogram is a graphical representation of the distribution of pixel intensities in a grayscale image. It shows the frequency of occurrence of each possible pixel intensity value in the image.
+
+In a gray-level histogram, the x-axis represents the possible intensity levels (ranging from 0 to 255 for an 8-bit grayscale image), while the y-axis represents the number of pixels in the image that have that intensity level. The histogram can be used to analyze the overall brightness and contrast of an image, as well as the distribution of features and texture.
+
+We can see the result of Gray-scale image of the girl's face ( You can see the code in the Jupyer notbook if you are interested):
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/bbaaf90e-3a73-423d-97f5-407555222c62)
+
+From the histogram, we can see: the count of pixels mainly gathered in the interval of [0,150], which Indicate that the overall image has a dark color tone. Also, we can see a large number of points are concentrated around two gray levels 25 and 70. Bt observation of the image, we can guess that these two gray levels represent large areas of similar color tones in the image, such as hair or background.
+
+### Equalization by Histogram method
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/8e1c4d2a-5a12-4276-ae7d-9a9c73546882)
 
