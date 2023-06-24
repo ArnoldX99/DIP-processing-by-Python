@@ -106,7 +106,10 @@ plt.imshow(blue_img)
 
 The operation is quite simpe for gray-scale figure-- we only need to multiply a $1 \times 3$ matrix. In fact you can just consider it as a 'weighted average' which can leads a RGB image to gray-scale.
 
-**Note**: The formula of Gray-dgree processing：$Gray=R*0.299+G*0.587+B*0.114$ \
+**Note**: The formula of Gray-dgree processing：
+
+$$Gray=R \times 0.299+G \times0.587+B \times0.114$$
+
 Or we can directly use package: *gray_img = cv2.cvtColor(img, cv2.COLOR_RGB2GRAY)*, directly reach the goal.
 
 ## 2.Gray-Level Histogram
@@ -120,6 +123,64 @@ We can see the result of Gray-scale image of the girl's face ( You can see the c
 
 From the histogram, we can see: the count of pixels mainly gathered in the interval of [0,150], which Indicate that the overall image has a dark color tone. Also, we can see a large number of points are concentrated around two gray levels 25 and 70. Bt observation of the image, we can guess that these two gray levels represent large areas of similar color tones in the image, such as hair or background.
 
-### Equalization by Histogram method
-![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/8e1c4d2a-5a12-4276-ae7d-9a9c73546882)
+### Linear Point Operations
+Since we've knwon well about the Histogram of digital image, that is actually a 'numerical expression'. That means, we could apply some numerical or mathematical methods on it to try some handling. 
 
+Fisrt of all, we are quite familiar with linear function we learnt in the high school: $y = kx + m$, where k and m are constant. Now the unkown $x$ is the gray-scale level of pixels.  Now we can make a rough guess and use code to verify whether it is reasonable: obviously, k can adjust the intensity of pixel gray values, and if it is negative, it means the inversion of brightness and darkness; m is used to increase the gray values of all pixels by a corresponding unit value, making the image darker or brighter overall.
+
+Now let's try by code:
+```python
+from PIL import Image
+
+# Open the image file
+image = Image.open("map.jfif")
+
+# Define the point operation function
+def point_operation(pixel,k,m):
+    # Extract the red, green, and blue values of the pixel
+    r, g, b = pixel
+
+    # Modify the pixel values using the point operation
+    r_new = int(r*k+m)
+    g_new = int(g*k+m)
+    b_new = int(b*k+m)
+
+    # Return the modified pixel values as a tuple
+    return (r_new, g_new, b_new)
+
+# Apply the point operation to each pixel in the image and we set k=1,b=-30
+new_data_1 = [point_operation(pixel,1,-30) for pixel in image.getdata()]
+
+# Create a new image with the modified pixel data
+new_image_1 = Image.new(image.mode, image.size)
+new_image_1.putdata(new_data_1)
+
+
+# Apply the point operation to each pixel in the image and we set k=1.5,b=0
+new_data_2 = [point_operation(pixel,1.5,0) for pixel in image.getdata()]
+new_image_2 = Image.new(image.mode, image.size)
+new_image_2.putdata(new_data_2)
+
+# Apply the point operation to each pixel in the image and we set k=1,b=-50
+new_data_3 = [point_operation(pixel,0.5,-20) for pixel in image.getdata()]
+new_image_3 = Image.new(image.mode, image.size)
+new_image_3.putdata(new_data_3)
+
+
+# Save the modified image
+fig, ax = plt.subplots(2, 2, figsize=(15, 10))
+ax[0][0].imshow(image)
+ax[0][0].set_title('Original Image')
+ax[0][1].imshow(new_image_1)
+ax[0][1].set_title('Modified image k=1, b=-30')
+ax[1][0].imshow(new_image_2)
+ax[1][0].set_title('Modified image k=1.5, b=0')
+ax[1][1].imshow(new_image_3)
+ax[1][1].set_title('Modified image k=0.5, b=-20')
+```
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/59176213-4bab-4a53-ad1c-ea03a9588fb5)
+
+We can see by our operation for $y = k*x+b$: \
+By setting $b = -30$, the map get darker and we can see the buliding clearer. \
+By setting $k = 1.5$, we can see the contrast of map is larger. \
+By setting $k = 0$ and $b = -20$, we can see the map get darker and contrast is smaller.
