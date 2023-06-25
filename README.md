@@ -184,3 +184,54 @@ We can see by our operation for $y = k*x+b$: \
 By setting $b = -30$, the map get darker and we can see the buliding clearer. \
 By setting $k = 1.5$, we can see the contrast of map is larger. \
 By setting $k = 0$ and $b = -20$, we can see the map get darker and contrast is smaller.
+
+## Nonlinear Monotonic Point Operations
+Unlike linear point operations, which are limited to simple linear functions, nonlinear point operations can use more complex functions that allow for more flexible and precise adjustments to the image. Nonlinear point operations can be used to enhance the visual quality of an image, such as improving the visibility of details in a low-contrast image or enhancing the color saturation of an image.
+
+### Histogram Equalization
+Histogram equalization is a technique used in image processing to improve the contrast of an image. The goal of histogram equalization is to stretch the intensity range of an image to better utilize the full range of pixel intensities. This can improve the visual quality of an image and make it easier to see details that may be difficult to discern in a low-contrast image.
+
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/add0192b-4146-4c75-9e00-df22b34c213a)
+
+In fact you can see some mathematical proof in Wikipedia if you want:
+
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/63a7dbd2-5c69-4d56-acf0-f08d648e7a90)
+
+Do remember that we need to do a round operation since we want integers, a popular way is :
+$$y^{\prime}=round(y \cdot(L-1))$$
+
+Let's see the example of operating image of moon's surface from satelite:
+
+```python
+import cv2
+import numpy as np
+from matplotlib import pyplot as plt
+
+# Load input image
+img = cv2.imread('moon.jpeg', 0)
+
+# Calculate histogram
+hist, bins = np.histogram(img.flatten(), 256, [0, 256])
+
+# Calculate cumulative distribution function
+cdf = hist.cumsum()
+cdf_normalized = cdf * hist.max() / cdf.max()
+
+# Perform histogram equalization
+img_equalized = cv2.equalizeHist(img)
+
+# Display input, output and their histograms
+plt.figure(figsize=(10, 8))
+plt.subplot(2,2,1), plt.imshow(img, cmap='gray')
+plt.title('Input Image')
+plt.subplot(2,2,2), plt.hist(img.flatten(), 256, [0, 256],color = 'gray')
+plt.title('Input Histogram')
+plt.subplot(2,2,3), plt.imshow(img_equalized, cmap='gray')
+plt.title('Equalized Image')
+plt.subplot(2,2,4), plt.hist(img_equalized.flatten(), 256, [0, 256], color = 'gray')
+plt.title('Equalized Histogram')
+plt.show()
+```
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/1bf0a839-f11c-464f-aad8-d9a9fbeb3545)
+
+We can see clearly there is a enhancement of image. We can see the detail clearly due to the raise of contrast. We can see the Histogram, the length of bright/dark area increase, and the 200-250 part raise from none to around 2000. That shows this method is usually used to increase the overall contrast of many images, especially when the contrast of useful data in the image is relatively similar. With this method, brightness can be better distributed on the histogram. This can be used to enhance local contrast without affecting global contrast, and histogram equalization achieves this by effectively expanding commonly used brightness values.
