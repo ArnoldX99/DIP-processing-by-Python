@@ -235,3 +235,18 @@ plt.show()
 ![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/1bf0a839-f11c-464f-aad8-d9a9fbeb3545)
 
 We can see clearly there is a enhancement of image. We can see the detail clearly due to the raise of contrast. We can see the Histogram, the length of bright/dark area increase, and the 200-250 part raise from none to around 2000. That shows this method is usually used to increase the overall contrast of many images, especially when the contrast of useful data in the image is relatively similar. With this method, brightness can be better distributed on the histogram. This can be used to enhance local contrast without affecting global contrast, and histogram equalization achieves this by effectively expanding commonly used brightness values.
+
+Now we get a basic knowledge of Digital image processing. With this, we can further do more things useful like:
+**Words detection and recognition**:
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/ab31da99-4f70-476e-a35f-d4c7a9ba75ae)
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/3e4520d1-b936-4df7-9167-9baff50df4ac)
+
+**Immage recovering**:
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/ec8602fa-988b-46ea-aaac-21c147c60698)
+
+**Imgage searching**:
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/be37cc25-d590-43c7-9bd9-2abfdd192df5)
+![image](https://github.com/ArnoldX99/DIP-processing-by-Python/assets/64125777/cd02882d-2e1c-4494-8728-f67167bf3dcc)
+
+You can see all of them as notebook in files. Further more, we will update with some machine learnning and deep learning methods.
+
